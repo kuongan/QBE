@@ -1,0 +1,19 @@
+06-06 01:27 analyze      INFO     wav file processed
+06-06 01:27 analyze      INFO     spectrogram computed
+06-06 01:27 analyze      INFO     fingerprint (ver.1) computed
+06-06 01:27 fun          INFO     iterating through all songs in database
+06-06 01:27 fun          INFO     song title found for best match with song_id=62
+06-06 01:27 fun          INFO     song title found for best match with song_id=90
+06-06 01:27 fun          INFO     song title found for best match with song_id=1
+06-06 01:27 fun          INFO     song title found for best match with song_id=4
+06-06 01:27 fun          INFO     song title found for best match with song_id=52
+06-06 01:27 fun          INFO     song title found for best match with song_id=74
+06-06 01:27 fun          INFO     song title found for best match with song_id=93
+06-06 01:27 fun          INFO     song title found for best match with song_id=108
+06-06 01:27 fun          INFO     song title found for best match with song_id=42
+06-06 01:27 fun          INFO     song title found for best match with song_id=96
+06-06 01:27 fun          INFO     song title found for best match with song_id=100
+06-06 01:27 fun          INFO     song title found for best match with song_id=21
+06-06 01:27 fun          INFO     song title found for best match with song_id=77
+06-06 01:27 fun          INFO     song title found for best match with song_id=99
+06-06 01:27 fun          INFO     song title found for best match with song_id=69
