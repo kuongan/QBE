@@ -78,8 +78,6 @@ def main():
     # update
     if args.subcommands == "update":
         title = args.title
-        artist = args.artist
-        album = args.album
         if title is None:
             log.error('song title must be given for db search')
     # remove
@@ -135,8 +133,8 @@ def main():
 
 
 # RUN
-main()
+#main()
 
 
 # TEST INPUT
-# python interface.py identify --pathfile="C:\Users\User\freezam\music\snippet\0Wz4cG5phfA.wav" --type=2g
+# python interface.py identify --pathfile="C:\Users\User\freezam\music\snippet\0Wz4cG5phfA.wav" --type=2
