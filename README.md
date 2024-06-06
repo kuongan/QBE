@@ -40,7 +40,10 @@ Follow the installation instructions provided on the website.
 
 ## Install Dependencies
 Run the following command to install the required dependencies:
+```bash
 pip install -r requirements.txt
+```
+
 
 
 ## Description
