@@ -9,7 +9,7 @@ Users may create a customized music database, view spectral analyses of a song, 
 
 **Software**
 - `ffmpeg` for converting audio files to .wav format
-- `PostgreSQL` for database construction
+- `SQL Server` for database construction
 
 **Python packages**
 - `pydub` a Python ffmpeg wrapper
@@ -17,25 +17,30 @@ Users may create a customized music database, view spectral analyses of a song, 
 - `numpy` for audio signals transformations
 - `scipy` used in spectrogram and peak finding algorithms
 - `matplotlib` used for spectrogram plots
-- `psycopg2` a Python-PostgreSQL database adapter
+- `pyodbc` a Python-SQL Server database adapter
+- `Flask` 
 
 
-## Installation
+# Installation Guide
+## Clone the Project
+- Open your terminal or command prompt.
+- Navigate to the directory where you want to clone the project.
+- Run the following command to clone the repository:
+    git clone https://github.com/kuongan/QBE.git
 
-First, install the above dependencies.
+## Install SQL Server
 
-Second, git clone the project into a local git directory.
+Download and install SQL Server from the official Microsoft website.
+Follow the installation instructions provided on the website.
+### Set Up the Database
+- Open SQL Server Management Studio (SSMS).
+- Connect to your SQL Server instance.
+- Create new database "QBH"
 
-Third, you'll allow the program to access your PostgreSQL database where fingerprints can be stored. In the shazam folder, create a python file named `credentials.py`:
 
-```
-#credentials.py
-
-DB_USER = 'your-db-username'
-DB_PASSWORD = your-db-password
-```
-
-Now you're ready to start fingerprinting your audio collection!
+## Install Dependencies
+Run the following command to install the required dependencies:
+pip install -r requirements.txt
 
 
 ## Description
@@ -47,6 +52,7 @@ This program has the following functionalities:
 This program allows you to build your own music database at 1-click! 
  
 To get started, please copy your music files (preferably in mp3 format) into the freezam/music/mp3 folder. You'll notice that the folder already contains some pre-downloaded music files for testing purposes. Feel free to add or remove files in the folder. 
+Frist, you need to go to file database.py and replace your server name.
 
 Then run the following command in the terminal:
 
