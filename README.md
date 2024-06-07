@@ -51,9 +51,9 @@ Lỗi nữa chụp màn hình gửi lên group đi @@.
 
 mở visual code lên, cd dô thưu mục mới clone xún á, mở terminal lên (ctrl+shift+`) gõ 
 
-```
+```bash
 python interface.py construct
-``
+```
 Đợi nó chạy xong thì ngủ 1 giấc đi.
 
 gòi chạy python app.py là hiện cái web lên á ní.
