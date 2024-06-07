@@ -133,7 +133,7 @@ def main():
 
 
 # RUN
-#main()
+main()
 
 
 # TEST INPUT

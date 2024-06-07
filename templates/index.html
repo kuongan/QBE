@@ -2,81 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-    <title>Music App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>MUSEEK</title>
 </head>
 <body>
     <div class="wrapper">
-         <!-- Sidebar -->
         <div class="sidebar">
             <div class="profile">
-                <img src="{{ url_for('static', filename='css/logo.png') }}" alt="logo">
-                <h2>Freezam</h2>
+                <h2>MUSEEK</h2>
                 <p>CS117 project</p>
             </div>
             <ul>
                 <li>
-                    <a href="#" class="active" onclick="showSearch()">
+                    <a href="#" class="active" onclick="showSection('search')">
                         <span class="icon"><i class="fas fa-search"></i></span>
                         <span class="item">Search</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="showDatabase()">
-                        <span class="icon"><i class="fas fa-database"></i></span>
-                        <span class="item">My Database</span>
+                    <a href="#" onclick="showSection('add')">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span class="item">Add Song</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('delete')">
+                        <span class="icon"><i class="fas fa-trash"></i></span>
+                        <span class="item">Delete Song</span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <!-- Main section -->
-        <div class="section" id="searchSection">
-            <div class="top_navbar">
-                <div class="hamburger">
-                    <a href="#">
-                        <i class="fas fa-bars"></i>
-                    </a>
+        <div class="container">
+            <!-- Search Section -->
+            <div id="searchSection">
+                <img class="logo" src="{{ url_for('static', filename='css/image/logo.png') }}" alt="Logo">
+                <h1>Welcome to <span style="color: #0082FF;">MUSEEK</span></h1>
+                <p>Give me a sample music record, I will seek for the song for you!</p>
+
+                <div class="buttons">
+                    <button class="button" id="uploadButton">Upload</button>
+                    <input type="file" name="file" id="fileInput" style="display: none;">
+                    <button class="button" id="recordButton">Record</button>
+                </div>
+
+                <div class="search-button">
+                    <button class="button" id="searchButton">Click to search</button>
                 </div>
             </div>
-            <div class="container">
-                <h1>Search</h1>
-                <!-- Search content goes here -->
-            <form id="identifySnippetForm" method="POST" action="/" enctype="multipart/form-data">
-                <input type="file" name="file" id="file">
-                <button type="button" onclick="identifySnippet()">Identify Snippet</button>
-            </form>
-            
-            <form id="recordForm" method="POST" action="/">
-                <button type="button" onclick="record(event)">Record</button>
-            </form>
 
-            <button onclick="listSongs()">List Songs</button>
+            <!-- Add Song Section -->
+            <div id="addSection" style="display: none;">
+                <h1>Add a New Song</h1>
+                <form id="addSongForm">
+                    <div class="form-group">
+                        <label for="youtubeUrl">YouTube URL:</label>
+                        <input type="text" id="youtubeUrl" name="youtubeUrl" required>
+
+                    </div>
+                    <button type="submit" class="button">Add Song</button>
+                </form>
+            </div>
+
+
+            <!-- Delete Song Section -->
+            <div id="deleteSection" style="display: none;">
+                <h1>Delete a Song</h1>
+                <form action="/delete" method="post">
+                    <div class="form-group">
+                        <label for="songNameDelete">Song Name:</label>
+                        <input type="text" id="songNameDelete" name="songNameDelete" required>
+                    </div>
+                    <button type="submit" class="button">Delete Song</button>
+                </form>
             </div>
         </div>
 
-        <div class="section" id="databaseSection" style="display: none;">
-            <div class="top_navbar">
-                <div class="hamburger">
-                    <a href="#">
-                        <i class="fas fa-bars"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="container">
-                <h1>My Database</h1>
-                <!-- Database content goes here -->
-                <button onclick="addSong()">Add Song</button>
-                <button onclick="updateSong()">Update Song</button>
-                <button onclick="removeSong()">Remove Song</button>
-                <button onclick="constructDatabase()">Construct Database</button>
+        <!-- Modal -->
+        <div id="messageBox" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <p id="messageText"></p>
             </div>
         </div>
+        <div id="messbox" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <div class="result" id="songListContainer">
+                    <h1>BEST MATCHED SONGS</h1>
+                    <ul id="songList"></ul>
+                </div>
+            </div>
+        </div>
+
+
     </div>
-
-    <script src="{{ url_for('static', filename= 'script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

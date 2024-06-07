@@ -17,7 +17,7 @@ import os
 import logging
 import numpy as np
 import analyze as a
-import convert as c
+import convert as c 
 import database as d
 from database import conn
 from analyze import spectrogram
@@ -50,8 +50,9 @@ def firststep(conn):
             d.update_fingerprinted(song_id, conn)
     
     print('Done! Please check out your database ❤')
-def add_single(conn, pathfile):
-    if pathfile.endswith(".mp3"):
+def add_single(conn, file):
+    if file.endswith(".mp3"):
+        pathfile = "./music/mp3/" + file
         tup, yt_id = c.get_file(pathfile) # type: ignore
         d.add_song_and_url(tup[0], yt_id, conn)
         log.info('metadata recorded in the database')
@@ -66,12 +67,8 @@ def add_single(conn, pathfile):
         log.info('audio file no. %s recorded in the database', song_id)
         d.add_fingerprint(filename, t, fingerprints1, fingerprints2, conn)
         d.update_fingerprinted(song_id, conn)
-        
         print('Done!', filename, 'added to your database ❤')
-
-
-
-
+        
 def identify(conn, pathfile):
     """ identify a snippet (wav) with fingerprint ver.1 """
 
