@@ -1,9 +1,6 @@
-# Freezam: A Shazam-like Audio Recognition Algorithm
+# MUSEEK: A Shazam-like Audio Recognition Algorithm
 
 Audio fingerprinting and recognition algorithm implemented in Python. 
-
-Users may create a customized music database, view spectral analyses of a song, and identify a song from noisy snippets. Main functionality of this program has been tested on Windows 10.
-
 
 ## Dependencies
 
@@ -44,7 +41,24 @@ Run the following command to install the required dependencies:
 pip install -r requirements.txt
 ```
 
+đoạn này viết tiếng việt cho mấy ní dễ làm theo nhoa.
 
+Tải hết thư viện mà tui import ik, mấy đoạn tải ffmpeg dễ lỗi lắm thì thử pip install ffmpeg.
+
+Nếu nó hiện Requirement already satisfied gòi thì dô cmd, gõ where ffmpeg gòi lấy cái path đó dô chỗ sửa biến môi trường add vào.
+
+Lỗi nữa chụp màn hình gửi lên group đi @@.
+
+mở visual code lên, cd dô thưu mục mới clone xún á, mở terminal lên (ctrl+shift+`) gõ 
+
+```
+python interface.py construct
+``
+Đợi nó chạy xong thì ngủ 1 giấc đi.
+
+gòi chạy python app.py là hiện cái web lên á ní.
+
+Giờ ngồi code html, css đi.
 
 ## Description
 
