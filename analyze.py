@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors
 
 
+
 log = logging.getLogger(__name__)
 
 import numpy as np
@@ -34,14 +35,12 @@ def spectrogram(pathfile):
             series = np.mean(series, axis=1)  # Stereo
         else:
             raise ValueError("Audio file has an unsupported number of channels")
-
-
         # Tính toán spectrogram
         f, t, spect = signal.spectrogram(
             series,
             fs=framerate,
             nperseg=10*framerate,
-            noverlap=(10-1)*framerate,
+            noverlap=int(0.5*framerate),
             window="hamming"
         )
         log.info("spectrogram computed")
@@ -49,10 +48,6 @@ def spectrogram(pathfile):
 
     except Exception as e:
         raise RuntimeError(f"Error processing WAV file: {e}")
-
-
-
-
 
 def plot_spectrogram(f, t, spect):
     """plot a spectrogram"""
@@ -77,7 +72,6 @@ def fingerprint(f, spect):
     spect = spect / np.max(spect)  # Normalize the spectrogram
     
     peaks = np.argmax(spect, axis=0)
-    
     if max(f) == 0:
         raise ValueError("Frequency array contains only zeros")
     
@@ -86,8 +80,6 @@ def fingerprint(f, spect):
     log.info("fingerprint (ver.1) computed")
 
     return np.array(fingerprints)
-
-
 
 def fingerprint2(f, spect, framerate):
     """compute fingerprint (ver.2) from spectrogram
@@ -154,11 +146,6 @@ def match(f1, f2):
 
 # TEST OUTPUT
 
-#pathfile = r"C:\Users\User\freezam\music\snippet\you.wav"
-#framerate, f, t, spect = spectrogram(pathfile)
-#plot_spectrogram(f, t, spect)
-#fingerprint(f, spect)
-#print(fingerprint2(f, spect, framerate))
 def custom_euclidean(x, y):
     """Tính khoảng cách Euclidean giữa hai vectơ."""
     return np.sqrt(np.sum((x - y) ** 2))
