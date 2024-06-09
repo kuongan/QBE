@@ -146,6 +146,7 @@ def match(f1, f2):
 
 # TEST OUTPUT
 
+
 def custom_euclidean(x, y):
     """Tính khoảng cách Euclidean giữa hai vectơ."""
     return np.sqrt(np.sum((x - y) ** 2))

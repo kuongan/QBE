@@ -45,7 +45,8 @@ def identify_snippet():
     else:
         path = request.form.get('filePath')
     
-    title = s.identify_snippet(path, 1)
+    title = s.identify_snippet(path, 3)
+    print(title)
     # Trả về kết quả hoặc lỗi nếu cần
     return jsonify(result=title)
 
