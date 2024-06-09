@@ -1,16 +1,25 @@
-// Hàm hiển thị phần
-function showSection(sectionId) {
-    // Ẩn tất cả các phần và hiển thị phần đã chọn
+function showSection(sectionId, element) {
+    // Ẩn tất cả các phần
     document.getElementById('searchSection').style.display = 'none';
     document.getElementById('addSection').style.display = 'none';
     document.getElementById('deleteSection').style.display = 'none';
+    // Hiển thị phần đã chọn
     document.getElementById(sectionId + 'Section').style.display = 'block';
+
+    // Loại bỏ lớp active khỏi tất cả các liên kết
+    const links = document.querySelectorAll('.sidebar ul li a');
+    links.forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Thêm lớp active vào liên kết được chọn
+    element.classList.add('active');
 
     // Thay đổi URL dựa trên phần đã chọn
     const url = '/' + sectionId;
     history.pushState({ sectionId: sectionId }, null, url);
+    document.getElementById(sectionId + 'Section').style.display = 'block';
 }
-
 // Sự kiện popstate để xử lý việc điều hướng trang khi người dùng thực hiện điều hướng back hoặc forward
 window.addEventListener('popstate', function(event) {
     const sectionId = event.state.sectionId;
@@ -133,13 +142,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+
 });
 
 document.addEventListener('DOMContentLoaded', function() {
     // Lắng nghe sự kiện submit của form
     document.getElementById('addSongForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Ngăn chặn form gửi dữ liệu đi
-        
+        showMessage('Loading in progress...');
         const youtubeUrl = document.getElementById('youtubeUrl').value; // Lấy giá trị từ input
 
         // Gọi hàm thêm bài hát bằng AJAX
