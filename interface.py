@@ -6,6 +6,8 @@ import convert as c
 import database as d
 from database import conn
 from analyze import spectrogram
+import time
+from sklearn.metrics import accuracy_score, classification_report
 
 # INTERFACE DESIGN
 
@@ -29,9 +31,14 @@ parser_remove = subparsers.add_parser("remove", help='remove a song from databas
 parser_remove.add_argument('--title', type=str, help='song title')
 # construct (ingest an entire directory for database construction)
 parser_fun = subparsers.add_parser("construct", help='construct database at 1-click')
-# identify
-parser_identify = subparsers.add_parser("identify", help='identify a snippet')
-parser_identify.add_argument('--pathfile', type=str, help='pathfile of the snippet')
+# identify_snippet
+parser_identify_snippet = subparsers.add_parser("identify_snippet", help='identify a snippet')
+parser_identify_snippet.add_argument('--pathfile', type=str, help='pathfile of the snippet')
+parser_identify_snippet.add_argument('--type', type=int, help='1 or 2 or 3, fingerprint method for identification')
+#identify_dataset
+parser_identify = subparsers.add_parser("identify_dataset", help='identify a snippet')
+parser_identify.add_argument('--path', type=str, help='pathfile of folder')
+parser_identify.add_argument('--lb', type=str, help='label file(csv)')
 parser_identify.add_argument('--type', type=int, help='1 or 2, fingerprint method for identification')
 # admin
 parser_admin = subparsers.add_parser("admin", help='administrator mode. clean up database,etc.')
@@ -91,29 +98,55 @@ def main():
         f.firststep(conn)
 
     # identify
-    if args.subcommands == 'identify':
+    if args.subcommands == 'identify_snippet':
         pathfile = args.pathfile
         type = args.type
+        start=time.time()
         if pathfile is None:
             log.error('expected a pathfile for "identify" command')
         else:
             if type == 1:
                 # match by local peak
-                titlelist = f.identify1(conn, pathfile)
-                print(titlelist)
-                #for title in titlelist:
-                    #print('The best match is:', title)
+                title = f.identify1(conn, pathfile)
+                if title ==[]:
+                    print('No matched song found')
+                else:
+                    print('The best match is:', title)
 
             elif type == 2 or type is None:
                 # match by maximum power per octave (default)
-                titlelist = f.identify2(conn, pathfile)
-                for title in titlelist:
+                title = f.identify2(conn, pathfile)
+                if title ==[]:
+                    print('No matched song found')
+                else:
                     print('The best match is:', title)
-
+            elif type == 3 or type is None:
+                title1 = f.identify1(conn, pathfile)
+                print("title1", title1)
+                title2 = f.identify2(conn, pathfile)
+                print("title2", title2)
+                result =f.find_common_values(title1,title2)
+                print(result)
+                
             else:
                 log.error('expected 1 or 2 for "type"')
-
-
+        end =time.time()
+        print("tổng thời gian là:", end-start)
+    #dataset
+    if args.subcommands == 'identify_dataset':
+        pathfile = args.path
+        label_file = args.lb  
+        type = args.type
+        start=time.time()
+        if pathfile is None:
+            log.error('expected a pathfile for "identify" command')
+        else:
+            true, predict = f.identify_data(pathfile, label_file,type)   
+            accuracy = accuracy_score(true, predict)
+            report = classification_report(true, predict, zero_division=1)
+            print(report)
+            print(f"Accuracy: {accuracy:.2f}")
+                
     # admin
     if args.subcommands == 'admin':
         action = args.action
@@ -137,4 +170,4 @@ main()
 
 
 # TEST INPUT
-# python interface.py identify --pathfile="C:\Users\User\freezam\music\snippet\0Wz4cG5phfA.wav" --type=2
+# python interface.py identify --pathfile="C:\Users\User\freezam\music\snippet\query.wav" --type=2
