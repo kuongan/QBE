@@ -159,24 +159,22 @@ def identify_snippet(pathfile, type):
         return None
     else:
         if type == 1:
-            titlelist = f.identify1(conn, pathfile)
+            titlelist,song_id = f.identify1(conn, pathfile)
             if not titlelist:
                 return None
             return titlelist
         elif type == 2 or type is None:
-            titlelist = f.identify2(conn, pathfile)
+            titlelist, song_id = f.identify2(conn, pathfile)
             if not titlelist:
                 return None
-            for title in titlelist:
-                print('The best match is:', title)
             return titlelist
         elif type == 3:
-            title1 = f.identify1(conn, pathfile)
-            title2 = f.identify2(conn, pathfile)
+            title1, song_id1 = f.identify1(conn, pathfile)
+            print('tt', title1)
+            title2, song_id2 = f.identify2(conn, pathfile)
+            print('tt2', title2)
             titlelist = f.find_common_values(title1, title2)
-            if not titlelist:
-                return None
-            return titlelist
+            return [f'{titlelist}']
         else:
             log.error('expected 1 or 2 for "type"')
             return None

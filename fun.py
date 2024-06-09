@@ -163,15 +163,14 @@ def find_common_values(title1, title2):
     # Tạo các từ điển để lưu trữ độ quan trọng của các giá trị trong mỗi danh sách
     importance1 = {}
     importance2 = {}
-    
     # Tính độ quan trọng cho mỗi giá trị trong danh sách 1
     for idx, value in enumerate(title1):
+        print(idx, type(idx))
         importance1[value] = 5-idx    
-        print("import1",importance1)
     # Tính độ quan trọng cho mỗi giá trị trong danh sách 2
     for idx, value in enumerate(title2):
+        print(idx, type(idx))
         importance2[value] = 5-idx 
-        print("import2",importance2)
     # Tạo danh sách để lưu trữ tất cả các giá trị
     all_values = set(title1) | set(title2)
 
@@ -183,7 +182,6 @@ def find_common_values(title1, title2):
     for value in all_values:
         score = importance1.get(value, 0) + importance2.get(value, 0)
         result.append((value, score))
-        print(result)
     
     # Sắp xếp kết quả theo điểm số giảm dần
     result.sort(key=lambda x: x[1], reverse=True)
