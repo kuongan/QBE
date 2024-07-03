@@ -1,64 +1,58 @@
 from flask import Flask, render_template, request, jsonify
-import search as s
-from record import RecordQuery
-import os
-from downloader import download
+from storage import setup_db
+from recognise import listen_to_song, recognise_song, register_directory, register_song
+import os 
 
 app = Flask(__name__)
-# Định nghĩa thư mục lưu trữ
-UPLOAD_FOLDER = './music/snippet/'
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# ENDPOINTS
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/addsong', methods=['POST'])
-def addsong():
-    data = request.json
-    if 'youtubeUrl' in data: # type: ignore
-        youtubeUrl = data['youtubeUrl'] # type: ignore
-        pathfile = download(youtubeUrl)
-        s.add_song(pathfile)
-        return jsonify(success=True)
-    else:
-        return jsonify(success=False, message='Missing youtubeUrl field')
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        pathfile = request.json.get('pathfile')  # Access JSON data
+        if os.path.isdir(pathfile):
+            register_directory(pathfile)
+        else:
+            register_song(pathfile)
+        return jsonify({'message': 'Registration completed successfully.'})
 
-@app.route('/remove_song', methods=['POST'])
-def remove_song():
-    title = request.form['title']
-    s.remove_song(title)
-    return jsonify(success=True)
+from flask import jsonify
 
-@app.route('/construct_database', methods=['GET'])
-def construct_database():
-    s.construct_database()
-    return jsonify(success=True)
+@app.route('/recognise', methods=['POST'])
+def recognise():
+    if request.method == 'POST':
+        data = request.json  
+        listen = data.get('listen')
+        pathfile = data.get('pathfile')
+        pathfile = os.path.join(r'C:\Users\User\abracadabra\music\snippet\noise', pathfile)
+        print("Received pathfile:", pathfile)
+        result = recognise_song(pathfile)
+        
+        # Assuming `recognise_song` returns a list of titles
+        result_text = '\n'.join(result)  
+        print(result_text)
 
-@app.route('/identify_snippet', methods=['POST'])
-def identify_snippet():
-    if 'file' in request.files:
-        file = request.files['file']
-        path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename) # type: ignore
-        file.save(path)  # Lưu file tạm thời để xử lý
-    else:
-        path = request.form.get('filePath')
+        return result_text, 200  # Return plain text response
+
+
+
     
-    title = s.identify_snippet(path, 3)
-
-    # Trả về kết quả hoặc lỗi nếu cần
-    return jsonify(result=title)
-
-@app.route('/list_songs', methods=['GET'])
-def list_songs():
-    titles = s.list_songs()
-    return jsonify(result=titles)
-
 @app.route('/record', methods=['POST'])
 def record():
-    RecordQuery(20)
-    return jsonify(success=True)
+    if request.method == 'POST':
+        listen = request.json.get('listen')  # Access JSON data
+        result = listen_to_song()
+        print(result)
+        return jsonify({'result': result})
+    
+@app.route('/initialise', methods=['POST'])
+def initialise():
+    if request.method == 'POST':
+        setup_db()
+        return jsonify({'message': 'Database initialised successfully.'})
 
 if __name__ == '__main__':
     app.run(debug=True)
