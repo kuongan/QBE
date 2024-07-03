@@ -11,24 +11,31 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
-    pathfile = request.json.get('pathfile')
-    if pathfile:
-        if os.path.isdir(pathfile):
-            register_directory(pathfile)
-        else:
-            register_song(pathfile)
-        return jsonify({'message': 'Registration completed successfully.'})
-    return jsonify({'error': 'Invalid pathfile provided.'}), 400
+    if not request.json:
+        return jsonify({'error': 'No JSON data provided.'}), 400
+
+    pathfile = request.json.get('pathfile', None)
+    if not pathfile:
+        return jsonify({'error': 'Pathfile is required.'}), 400
+
+    if os.path.isdir(pathfile):
+        register_directory(pathfile)
+    else:
+        register_song(pathfile)
+    return jsonify({'message': 'Registration completed successfully.'})
 
 @app.route('/recognise', methods=['POST'])
 def recognise():
-    data = request.json
-    pathfile = data.get('pathfile')
-    if pathfile:
-        pathfile = os.path.join(r'C:\Users\User\freezam\music\snippet\noise', pathfile)
-        result = recognise_song(pathfile)
-        return jsonify({'results': result}), 200
-    return jsonify({'error': 'Pathfile is required.'}), 400
+    if not request.json:
+        return jsonify({'error': 'No JSON data provided.'}), 400
+
+    pathfile = request.json.get('pathfile', None)
+    if not pathfile:
+        return jsonify({'error': 'Pathfile is required.'}), 400
+
+    pathfile = os.path.join(r'.\music\snippet\noise', pathfile)
+    result = recognise_song(pathfile)
+    return jsonify({'results': result})
 
 @app.route('/record', methods=['POST'])
 def record():
