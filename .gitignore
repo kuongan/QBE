@@ -1,0 +1,4 @@
+music/
+__pychace__/
+.pytest_cache
+.vscode
