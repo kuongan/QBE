@@ -26,23 +26,19 @@
                 </div>
             </div>
 
-        <!-- Modal -->
-        <div id="messageBox" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <p id="messageText"></p>
-            </div>
-        </div>
-        <div id="messbox" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <div class="result" id="songListContainer">
-                    <h1>BEST MATCHED SONGS</h1>
-                    <ul id="songList"></ul>
+            <!-- Modal for displaying results -->
+            <div id="messbox" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <div class="result" id="songListContainer">
+                        <h1>BEST MATCHED SONGS</h1>
+                        <ul id="songList"></ul>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
