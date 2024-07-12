@@ -1,64 +1,73 @@
 from flask import Flask, render_template, request, jsonify
-import search as s
-from record import RecordQuery
 import os
-from downloader import download
-
+from storage import setup_db
+from recognise import listen_to_song, recognise_song, register_directory, register_song
+import pyodbc
 app = Flask(__name__)
-# Định nghĩa thư mục lưu trữ
-UPLOAD_FOLDER = './music/snippet/'
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# ENDPOINTS
+DIRECTORY = r'C:\Users\User\freezam\music\snippet\noise'
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/addsong', methods=['POST'])
-def addsong():
-    data = request.json
-    if 'youtubeUrl' in data: # type: ignore
-        youtubeUrl = data['youtubeUrl'] # type: ignore
-        pathfile = download(youtubeUrl)
-        s.add_song(pathfile)
-        return jsonify(success=True)
+@app.route('/register', methods=['POST'])
+def register():
+    if not request.json:
+        return jsonify({'error': 'No JSON data provided.'}), 400
+
+    pathfile = request.json.get('pathfile', None)
+    if not pathfile:
+        return jsonify({'error': 'Pathfile is required.'}), 400
+
+    if os.path.isdir(pathfile):
+        register_directory(pathfile)
     else:
-        return jsonify(success=False, message='Missing youtubeUrl field')
+        register_song(pathfile)
+    return jsonify({'message': 'Registration completed successfully.'})
 
-@app.route('/remove_song', methods=['POST'])
-def remove_song():
-    title = request.form['title']
-    s.remove_song(title)
-    return jsonify(success=True)
+@app.route('/recognise', methods=['POST'])
+def recognise():
+    if not request.json:
+        return jsonify({'error': 'No JSON data provided.'}), 400
 
-@app.route('/construct_database', methods=['GET'])
-def construct_database():
-    s.construct_database()
-    return jsonify(success=True)
+    pathfile = request.json.get('pathfile', None)
+    print(pathfile)
+    if not pathfile:
+        return jsonify({'error': 'Pathfile is required.'}), 400
 
-@app.route('/identify_snippet', methods=['POST'])
-def identify_snippet():
-    if 'file' in request.files:
-        file = request.files['file']
-        path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename) # type: ignore
-        file.save(path)  # Lưu file tạm thời để xử lý
-    else:
-        path = request.form.get('filePath')
-    
-    title = s.identify_snippet(path, 3)
+    try:
+        pathfile = os.path.join(DIRECTORY, pathfile)
+        result = recognise_song(pathfile)
+        print(result)
+        
+        # Convert pyodbc.Row to a list or dictionary
+        if isinstance(result, pyodbc.Row):
+            result = [item for item in result]
 
-    # Trả về kết quả hoặc lỗi nếu cần
-    return jsonify(result=title)
+        # Ensure result is in the expected format
+        if isinstance(result, (list, tuple)) and all(isinstance(item, str) for item in result):
+            return jsonify({'results': result}), 200
+        elif isinstance(result, str):
+            return jsonify({'results': [result]}), 200
+        else:
+            return jsonify({'error': 'Unexpected result type from recognise_song.'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-@app.route('/list_songs', methods=['GET'])
-def list_songs():
-    titles = s.list_songs()
-    return jsonify(result=titles)
+
+
+
+
 
 @app.route('/record', methods=['POST'])
 def record():
-    RecordQuery(20)
-    return jsonify(success=True)
+    result = listen_to_song()
+    return jsonify({'result': result})
+
+@app.route('/initialise', methods=['POST'])
+def initialise():
+    setup_db()
+    return jsonify({'message': 'Database initialised successfully.'})
 
 if __name__ == '__main__':
     app.run(debug=True)

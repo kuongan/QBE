@@ -12,96 +12,32 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar">
-            <div class="profile">
-                <h2>MUSEEK</h2>
-                <p>CS117 project</p>
-            </div>
-            <ul>
-                <li>
-                    <a href="#" class="active" onclick="showSection('search')">
-                        <span class="icon"><i class="fas fa-search"></i></span>
-                        <span class="item">Search</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#add" onclick="showSection('add')">
-                        <span class="icon"><i class="fas fa-plus"></i></span>
-                        <span class="item">Add Song</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#delete" onclick="showSection('delete')">
-                        <span class="icon"><i class="fas fa-trash"></i></span>
-                        <span class="item">Delete Song</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
         <div class="container">
             <!-- Search Section -->
-            <div id="searchSection">
+            <div id="Section">
                 <img class="logo" src="{{ url_for('static', filename='css/image/logo.png') }}" alt="Logo">
                 <h1>Welcome to <span style="color: #0082FF;">MUSEEK</span></h1>
-                <p>Give me a sample music record, I will seek for the song for you!</p>
+                <p>Give me a sample music record, I will seek the song for you!</p>
 
                 <div class="buttons">
-                    <button class="button" id="uploadButton">Upload</button>
+                    <button class="button" id="upButton">Your file</button>
                     <input type="file" name="file" id="fileInput" style="display: none;">
                     <button class="button" id="recordButton">Record</button>
                 </div>
+            </div>
 
-                <div class="search-button">
-                    <button class="button" id="searchButton">Click to search</button>
+            <!-- Modal for displaying results -->
+            <div id="messbox" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <div class="result" id="songListContainer">
+                        <h1>BEST MATCHED SONGS</h1>
+                        <ul id="songList"></ul>
+                    </div>
                 </div>
             </div>
 
-            <!-- Add Song Section -->
-            <div id="addSection" style="display: none;">
-                <h1>Add a New Song</h1>
-                <form id="addSongForm">
-                    <div class="form-group">
-                        <label for="youtubeUrl">YouTube URL:</label>
-                        <input type="text" id="youtubeUrl" name="youtubeUrl" required>
-
-                    </div>
-                    <button type="submit" class="button">Add Song</button>
-                </form>
-            </div>
-
-
-            <!-- Delete Song Section -->
-            <div id="deleteSection" style="display: none;">
-                <h1>Delete a Song</h1>
-                <form action="/delete" method="post">
-                    <div class="form-group">
-                        <label for="songNameDelete">Song Name:</label>
-                        <input type="text" id="songNameDelete" name="songNameDelete" required>
-                    </div>
-                    <button type="submit" class="button">Delete Song</button>
-                </form>
-            </div>
         </div>
-
-        <!-- Modal -->
-        <div id="messageBox" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <p id="messageText"></p>
-            </div>
-        </div>
-        <div id="messbox" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <div class="result" id="songListContainer">
-                    <h1>BEST MATCHED SONGS</h1>
-                    <ul id="songList"> </ul>
-                </div>
-            </div>
-        </div>
-
-
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
